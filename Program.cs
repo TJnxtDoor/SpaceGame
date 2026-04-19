@@ -6,30 +6,47 @@ public class Program
 
     public static void Main() 
     {
-        Console.WriteLine("--- Warp Drive Terminal ---");
+        Console.WriteLine( "Enter jump distance in Light Years (LY).");
+        Console.WriteLine("Type 'exit' to power down the engines.");
 
         while(true) 
         {
-            Console.Write("Enter distance or 'exit': ");
+            Console.Write("\n> Enter Jump Distance: ");
+            
             string input = Console.ReadLine();
 
             if (input.ToLower() == "exit") 
             {
+                Console.WriteLine($"\nFinal Log: Total distance covered: {totalDistance} LY.");
+                Console.WriteLine("Engines powered down. Safe travels, Captain.");
                 break; 
             }
+
             try 
-            {
+            {        
                 int dist = int.Parse(input);
-                if (dist < 0) {
-                    Console.WriteLine("Can't go backwards!");
-                } else {
+
+                if (dist < 0) 
+                {
+                    Console.WriteLine("![NAV ERROR]: Negative distance? We aren't going back in time.");
+                } 
+                else 
+                {
                     totalDistance += dist;
-                    Console.WriteLine("Jumped " + dist + " LY. Total: " + totalDistance);
+                    Console.WriteLine($"Jump successful! +{dist} LY. [Current Odometer: {totalDistance} LY]");
                 }
             }
-            catch (Exception)
+            catch (FormatException)
             {
-                Console.WriteLine("Error: That's not a valid number.");
+                Console.WriteLine("![SYSTEM ERROR]: Invalid coordinates. Please enter a whole number.");
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("![SYSTEM ERROR]: Jump distance too large for ship's computer to calculate.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"![CRITICAL ERROR]: {ex.Message}");
             }
         }
     }
